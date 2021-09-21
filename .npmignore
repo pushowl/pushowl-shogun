@@ -1,0 +1,8 @@
+.env
+.storybook
+coverage
+docs
+jest.config.js
+src
+tsconfig.*
+typedoc.json

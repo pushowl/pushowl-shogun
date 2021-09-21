@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true
+  },
+  "include": ["./src/index.ts"],
+  "exclude": ["**/*.test.tsx?", "**/*.stories.tsx", "**/*.mock.ts"]
+}

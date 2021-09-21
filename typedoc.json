@@ -1,0 +1,10 @@
+{
+  "entryPoints": ["./src/index.ts"],
+  "out": "docs",
+  "includeVersion": true,
+  "readme": "none",
+  "disableSources": true,
+  "excludeExternals": true,
+  "hideBreadcrumbs": true,
+  "hideInPageTOC": true
+}
