@@ -1,16 +1,6 @@
-<!--
-  Template guidance: Please follow this template's general format, but feel free to add sections as needed, or remove sections that are irrelevant for this integration. Any images need to be stored in a third party source (e.g. an S3 bucket or Loom), not in this package, so they can be served on both GitHub and npm.
--->
+# PushOwl
 
-# Name of integration
-
-<!-- ^ Replace with name of integration. E.g. BigCommerce Reviews -->
-
-… integration for Shogun Frontend.
-
-<!-- ^ One line description for package for npm -->
-
-<!-- Enter a 1-2 sentence description of what the third-party application or this integration is for. (e.g. Enable users to submit product reviews to your BigCommerce store.) -->
+PushOwl integration for Shogun Frontend.
 
 <table>
   <tbody>
@@ -21,11 +11,7 @@
   </tbody>
 </table>
 
-<!-- ^ required notice -->
-
-[Official website →](https://<enter-url-here>)
-
-<!-- ^ e.g. [BigCommerce website →](https://www.bigcommerce.com/) -->
+[PushOwl →](https://pushowl.com/)
 
 ## Overview
 
@@ -35,9 +21,9 @@
 
 ## Installation
 
-`yarn add @frontend-sdk/<enter-package-name>`
+`yarn add @frontend-sdk/pushowl`
 
-`npm install @frontend-sdk/<enter-package-name>`
+`npm install @frontend-sdk/pushowl`
 
 ## Functionality 1
 
@@ -106,14 +92,3 @@ You can find your site ID in Shogun Frontend. Log into https://frontend.getshogu
 <!-- ... See Functionality 1 template above -->
 
 ## Development
-
-### Setting up .env
-
-<!-- ^ Remove if this package doesn't require any .env variables -->
-
-Create a new file `/.env` in the repo root with the following content:
-
-```dotenv
-SITE_ID= // Insert Shogun Frontend site ID here
-STORE_DOMAIN= // Insert store domain here. E.g. myfancywidgets.com
-```
