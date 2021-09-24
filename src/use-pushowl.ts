@@ -1,18 +1,13 @@
 import { useEffect } from 'react'
 import { useCartState } from 'frontend-checkout'
-import { StorePlatformDomain, CustomPromptConfig } from './types'
+import { useCustomerState } from 'frontend-customer'
+import { StorePlatformDomain, CustomPromptConfig, NotificationPermission, Product, Pushowl } from './types'
 
-declare global {
-    interface Window {
-        pushowl: {
-            trigger: Function
-            init: () => void
-        }
-    }
-}
-
-export const usePushowl = ({ storePlatformDomain }: { storePlatformDomain: StorePlatformDomain }) => {
+export const usePushowl = ({ storePlatformDomain = null }: { storePlatformDomain: StorePlatformDomain | null }) => {
     const cart = useCartState()
+    const { id: customerId } = useCustomerState()
+
+    // we do use window.location.href to check it is in the product page
     const isProductPage = /\/products/.exec(window.location.href)
 
     const cartItems = cart.items
@@ -25,6 +20,11 @@ export const usePushowl = ({ storePlatformDomain }: { storePlatformDomain: Store
 
         injectScript(storePlatformDomain)
     }, [storePlatformDomain])
+
+    // Syncing customer id
+    useEffect(() => {
+        window.pushowl.trigger('setCustomerId', customerId)
+    }, [customerId])
 
     // sync product when in product page
     useEffect(() => {
@@ -40,14 +40,14 @@ export const usePushowl = ({ storePlatformDomain }: { storePlatformDomain: Store
     }, [cartItems])
 
     const showBrowserPrompt = () => {
-        window.pushowl.trigger('getCurrentPermission').then((permission: any) => {
+        window.pushowl.trigger('getCurrentPermission').then((permission: NotificationPermission) => {
             if (permission !== 'default') return
             window.pushowl.trigger('showWidget', { type: 'browserPrompt' })
         })
     }
 
     const showCustomPrompt = (config: CustomPromptConfig) => {
-        window.pushowl.trigger('getCurrentPermission').then((permission: any) => {
+        window.pushowl.trigger('getCurrentPermission').then((permission: NotificationPermission) => {
             if (permission !== 'default') return
             window.pushowl.trigger('showWidget', {
                 type: 'customPrompt',
@@ -60,10 +60,10 @@ export const usePushowl = ({ storePlatformDomain }: { storePlatformDomain: Store
         })
     }
 
-    const showProdutFlyoutWidget = (product: any) => {
+    const showProdutFlyoutWidget = (product: Product) => {
         const variant = product.variant
 
-        if (product.isAvailableForSale) {
+        if (product.available) {
             window.pushowl.trigger('showWidget', {
                 type: 'priceDrop',
                 product: {
@@ -99,35 +99,40 @@ export const usePushowl = ({ storePlatformDomain }: { storePlatformDomain: Store
     }
 }
 
-const injectScript = (subdomain: StorePlatformDomain) => {
-    window.pushowl = window.pushowl || {
-        queue: [],
-        trigger: (taskName: string, taskData: Object) =>
-            new Promise((resolve, reject) => {
-                // @ts-ignore
-                this.queue.push({
-                    taskName,
-                    taskData,
-                    promise: { resolve, reject },
+const injectScript = (subdomain: StorePlatformDomain | null) => {
+    if (!window.pushowl) {
+        const pushowl: Pushowl = {
+            queue: [],
+            subdomain,
+            trigger: (
+                taskName: string,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                taskData: any,
+            ) => {
+                return new Promise((resolve, reject) => {
+                    window.pushowl.queue.push({
+                        taskName,
+                        taskData,
+                        promise: { resolve, reject },
+                    })
                 })
-            }),
-        init: () => {
-            if (!subdomain) {
-                return
-            }
+            },
+            init: () => {
+                if (subdomain === null) {
+                    return
+                }
 
-            // @ts-ignore
-            this.subdomain = subdomain
-            var s = document.createElement('script')
-            s.type = 'text/javascript'
-            s.async = true
-            s.src = `https://cdn.pushowl.com/sdks/pushowl-sdk.js?subdomain=${subdomain}&environment=production&shop=${subdomain}.myshopify.com`
+                const script = document.createElement('script')
+                script.type = 'text/javascript'
+                script.async = true
+                script.src = `https://cdn.pushowl.com/sdks/pushowl-sdk.js?subdomain=${subdomain}&environment=production&shop=${subdomain}.myshopify.com`
+                document.body.append(script)
+                return script
+            },
+        }
 
-            var x = document.getElementsByTagName('script')[0]
-            if (x && x.parentNode) {
-                x.parentNode.insertBefore(s, x)
-            }
-        },
+        window.pushowl = pushowl
     }
+
     window.pushowl.init()
 }
