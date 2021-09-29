@@ -39,63 +39,12 @@ export const usePushowl = ({ storePlatformDomain = null }: { storePlatformDomain
         })
     }, [cartItems])
 
-    const showBrowserPrompt = () => {
-        window.pushowl.trigger('getCurrentPermission').then((permission: NotificationPermission) => {
-            if (permission !== 'default') return
-            window.pushowl.trigger('showWidget', { type: 'browserPrompt' })
-        })
-    }
-
-    const showCustomPrompt = (config: CustomPromptConfig) => {
-        window.pushowl.trigger('getCurrentPermission').then((permission: NotificationPermission) => {
-            if (permission !== 'default') return
-            window.pushowl.trigger('showWidget', {
-                type: 'customPrompt',
-                yesButton: { label: 'Subscribe' },
-                noButton: { label: 'Later' },
-                position: { default: 'top-left', mobile: 'bottom' },
-                overlay: { enabled: false },
-                ...config,
-            })
-        })
-    }
-
-    const showProdutFlyoutWidget = (product: Product) => {
-        const variant = product.variant
-
-        if (product.available) {
-            window.pushowl.trigger('showWidget', {
-                type: 'priceDrop',
-                product: {
-                    id: product.id,
-                    title: product.title,
-                },
-                variant: {
-                    id: variant.id,
-                    title: variant.title,
-                    price: variant.price,
-                },
-            })
-        } else {
-            window.pushowl.trigger('showWidget', {
-                type: 'backInStock',
-                product: {
-                    id: product.id,
-                    title: product.title,
-                },
-                variant: {
-                    id: variant.id,
-                    title: variant.title,
-                    price: variant.price,
-                },
-            })
-        }
+    const showWidget = (payload: any) => {
+        return window.pushowl.trigger('showWidget', payload)
     }
 
     return {
-        showBrowserPrompt,
-        showCustomPrompt,
-        showProdutFlyoutWidget,
+        showWidget,
     }
 }
 
