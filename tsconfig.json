@@ -1,10 +1,21 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "strict": true,
+    "allowJs": false,
+    "skipLibCheck": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "importHelpers": true,
     "outDir": "dist",
     "jsx": "react",
     "rootDir": "./src"
   },
   "include": ["."],
-  "exclude": ["dist", "public/serviceworker.js"]
+  "exclude": ["dist", "public/serviceworker.js", "node_modules"]
 }
