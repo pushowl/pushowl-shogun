@@ -1,11 +1,13 @@
 import { useEffect } from 'react'
 import { useCartState } from 'frontend-checkout'
 import { useCustomerState } from 'frontend-customer'
+import getConfig from 'frontend-config'
 import { StorePlatformDomain, CustomPromptConfig, NotificationPermission, Product, Pushowl } from './types'
 
-export const usePushowl = ({ storePlatformDomain = null }: { storePlatformDomain: StorePlatformDomain | null }) => {
+export const usePushowl = () => {
     const cart = useCartState()
     const { id: customerId } = useCustomerState()
+    const { storeDomain: subdomain } = getConfig()
 
     // we do use window.location.href to check it is in the product page
     const isProductPage = /\/products/.exec(window.location.href)
@@ -18,8 +20,8 @@ export const usePushowl = ({ storePlatformDomain = null }: { storePlatformDomain
             return
         }
 
-        injectScript(storePlatformDomain)
-    }, [storePlatformDomain])
+        injectScript(subdomain)
+    }, [subdomain])
 
     // Syncing customer id
     useEffect(() => {
