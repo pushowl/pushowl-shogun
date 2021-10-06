@@ -17,5 +17,6 @@
     "rootDir": "./src"
   },
   "include": ["."],
+  "frontend-config": ["index.ts", "lib/built-in/config"],
   "exclude": ["dist", "public/serviceworker.js", "node_modules"]
 }
