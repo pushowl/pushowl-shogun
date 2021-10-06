@@ -30,7 +30,7 @@ import { usePushowl } from '@frontend-sdk/pushowl'
 
 const App = () => {
   // Initialize pushowl
-  usePushowl()
+  usePushowl('test.myshopify.com')
 }
 ```
 
