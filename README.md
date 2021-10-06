@@ -15,9 +15,7 @@ PushOwl integration for Shogun Frontend.
 
 ## Overview
 
-<!--
-  (optional) Enter a general introduction or other background information.
--->
+This package allows you to send push notification for shogun store with shopify backend
 
 ## Installation
 
@@ -25,70 +23,124 @@ PushOwl integration for Shogun Frontend.
 
 `npm install @frontend-sdk/pushowl`
 
-## Functionality 1
+## Initialzing the hook
 
-<!-- ^ Replace with the name of one piece of functionality of this integration. E.g. Submit a new review -->
+```tsx
+import { usePushowl } from '@frontend-sdk/pushowl'
 
-### Usage
-
-<!--
-  Enter step by step description of how to set up and use this functionality.
-
-  E.g.
-  Call `useBigCommerceReviews()` with a, b, c ....
-  Create your own product review form, and in its submission handler call `submitReview()` with x, y, z ....
--->
-
-#### Example
-
-<!--
-  Enter basic example code that will work as-is if the user copies and pastes it into their own implementation.
-
-e.g.
-```jsx
-import { useBigCommerceReviews } from '@frontend-sdk/bigcommerce-reviews'
-
-const SubmitReviewPage = () => {
-  const { submissionStatus, submitReview } = useBigCommerceReviews(<enter site ID here>)
-  const handleChange = (event) => {...}
-  const handleSubmit = (event) => {...}
-
-  return (
-    <div>
-      <form onSubmit={handleSubmit}/>
-      <div>
-        Submission status: {submissionStatus}
-      </div>
-    </div>
-  )
+const App = () => {
+  // Initialize pushowl
+  usePushowl()
 }
 ```
- -->
 
-#### How to find required values
+### Adding service worker
 
-<!-- ^ Rename with whatever the user needs to find to make this piece of functionality work. E.g. site ID -->
+You need to copy a service worker file from this module's directory (node_modules/@frontend-sdk/pushowl/service-worker.js) into your app's static dir such that it is available on the path /static/pushowl/service-worker.js.
 
-<!-- Enter brief concrete instructions on where to find required values. Include precise links and examples of the data they're looking for.
+You can run the following set of commands from your root directory to copy the service worker file:
 
-E.g.
-You can find your site ID in Shogun Frontend. Log into https://frontend.getshogun.com/ and locate your site ID in the resulting URL. In this example, `https://frontend.getshogun.com/a1b2c3a1b2c3-a1b2c3a1b2c3-a1b2c3a1b2c3/pages` the site ID is `a1b2c3a1b2c3-a1b2c3a1b2c3-a1b2c3a1b2c3`.
--->
+cp node_modules/@frontend-sdk/pushowl/service-worker.js static/
 
-### Other information 1
+#### Abandoned Cart Recovery automation (Optional, if enabled)
 
-<!-- ^ Rename/remove as appropriate. E.g. Validation performed by third-party integration. Link to third-party documentation. Limitations. Recommendations. -->
-<!-- (optional) Enter information -->
+Abandoned Cart, if available on your PushOwl plan, works out of the box through this module for most parts. There is just configuration change required on PushOwl Side. Abandoned Cart push notifications open the cart page of your store. For stores with custom frontends, it becomes difficult to figure out the cart URL automatically. Hence, you need to explicitly enter your cart URL from PushOwl dashboard.
 
-### Other information 2
+If you have implemented a custom cart page in your store, use that page's URL as cart URL. Otherwise, you can use the following URL as your cart page: `https://<website_domain>?showCart=true`
 
-<!-- ^ Rename/remove as appropriate. E.g. Validation performed by third-party integration. Link to third-party documentation. Limitations. Recommendations. -->
-<!-- (optional) Enter information -->
+Here is how to update your cart URL in PushOwl dashboard:
 
-## Functionality 2
+1. Login to PushOwl dashboard -> https://dashboard.pushowl.com/shopify-login
+2. Go to Abandoned Cart settings though Automations > Abandoned Carts or directly visit https://dashboard.pushowl.com/automation/abandoned-cart-recovery
+3. Edit each of the active notification you see and change all instances of cart URLs in them to your actual cart URL (as discussed above).
+   ![changing cart urls](/assets/cart-url-change.png)
+4. Save and you are done!
 
-<!-- ^ Replace with the name of one piece of functionality of this integration. E.g. Show reviews. -->
+### Browse Abandonment, Price Drop, Back in Stock automations (Optional, if enabled)
 
-<!-- ... See Functionality 1 template above -->
+[Browse abandonment](https://docs.pushowl.com/en/articles/3821822-browse-abandonment), [Price drop](https://docs.pushowl.com/en/articles/2320402-price-drop-alert), [Back in stock](https://docs.pushowl.com/en/articles/2320389-back-in-stock-alert), if available on your PushOwl plan, work out of the box through this module.
 
-## Development
+Your product URLs defined in the Shopify admin should still work (as it is or with redirection). This is because on clicking Browse Abandonment notifications, users are taken to the product URL defined in the Shopify admin.
+
+ℹ️ **IMPORTANT INFORMATION**: In case you are still using your default Shopify store frontend for checkout purposes, you need to check the store URL registered on PushOwl. The store URL is what these automations use to build a product URL to send in the push notifications. You can check your registered store URL by visiting - [dashboard.pushowl.com/settings](https://dashboard.pushowl.com/settings). Like so:
+
+![store url](/assets/store-url.png)
+
+If the store URL you see above is not the right store URL where products are available, then the automation settings need to be adjusted for that. Currently, this can only be adjusted through us. So if this is the case, please let us know on [support@pushowl.com](support@pushowl.com) and we'll adjust the URLs.
+
+## API
+
+- There is a global object available called `pushowl` which can be accessed through `window.pushowl`.
+- The API works by triggering appropriate **"actions"**. An action can be triggered like so: `window.pushowl.trigger(<action_name>, <options>)`. Eg. An action named "X" can be triggered through `window.pushowl.trigger("X")`
+
+Available API actions:
+
+### `showWidget`
+
+**Options available**
+
+- `type`: Type of widget to show. `browserPrompt`|`customPrompt`|`backInStock`|`priceDrop`
+
+For `customPrompt`, following extra options are available:
+
+- `title`: Title for the prompt
+- `description`: Description for the prompt
+- `yesButton`: "yes" button refers to the positive/allow button in the prompt. This is an object with `label` property.
+- `noButton`: "no" button refers to the negative/deny button in the prompt. This is an object with `label` property.
+- `logo` _(optional)_: URL of the image to show as logo. Defaults to a bell if nothing is passed.
+- `position` _(optional)_: Needs to be specified for desktop and mobile separately like so `position: {default: 'top-left', mobile: 'top'}`. Available options for desktop(default): `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`. Available options for mobile: `top`, `bottom`. Default is `{ default: 'top-center', mobile: 'top' }`
+- `overlay` _(optional)_: Controls the overlay that shows with the native permission prompt. Only accepts one property for now: `enabled: true|false`. Eg. `overlay: { enabled: false }`
+- `theme` _(optional)_: Allows changing various colors in the prompt. Currently supported properties are: `theme: { yesButtonBgColor: '#f00', yesButtonColor: '#fff' }`
+
+For `priceDrop` and `backInStock`
+
+- `product`: Product to which user subscribed price drop / back in stock notification. `product` requires the following keys
+  - `id`: It of the product as number
+  - `title`: Title of the product
+- `variant`: Selected variant of the above product which user subscribed to. `variant` requires the following keys
+  - `id`: It of the variant as number
+  - `title`: Title of the variant
+  - `price`: Price of the current variant as float
+
+### `syncCart`
+
+Cart syncing is auto-enabled in this module. This API gets called automatically whenever the cart is updated.
+
+## Recipes
+
+### To show a native browser prompt
+
+```
+if (Notification.permission === "default") {
+  window.pushowl
+    .trigger("showWidget", {
+      type: "browserPrompt",
+    })
+    .then((res) => {
+      // Do anything you want to after showing prompt
+    });
+}
+```
+
+Note, always check the current permission value before showing the prompt. `default` value means user has neither allowed nor denied.
+
+### To show a Custom Prompt
+
+```
+if (Notification.permission === "default") {
+  window.pushowl
+    .trigger("showWidget", {
+      type: "customPrompt",
+      title: "Lets get you offers!",
+      description: "Subscribe to get amazing offers",
+      yesButton: { label: "Subscribe" },
+      noButton: { label: "Later" },
+      logo: "image url here",
+      position: { default: "top-left", mobile: "bottom" },
+      overlay: { enabled: false },
+    })
+    .then((res) => {
+      // Do anything you want to after showing prompt
+    });
+}
+```
