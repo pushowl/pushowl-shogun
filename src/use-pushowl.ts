@@ -6,9 +6,10 @@ import { StorePlatformDomain, Pushowl } from './types'
 export const usePushowl = (subdomain: string) => {
     const cart = useCartState()
     const { id: customerId } = useCustomerState()
+    const cartId = cart.id
 
     // we do use window.location.href to check it is in the product page
-    const isProductPage = /\/products/.exec(window.location.href)
+    // const isProductPage = /\/products/.exec(window.location.href)
 
     const cartItems = cart.items
 
@@ -26,18 +27,29 @@ export const usePushowl = (subdomain: string) => {
         window.pushowl.trigger('setCustomerId', customerId)
     }, [customerId])
 
-    // sync product when in product page
-    useEffect(() => {
-        window.pushowl.trigger('syncProductView', { productId: 89789578956 })
-    }, [isProductPage])
+    // // sync product when in product page
+    // useEffect(() => {
+    //     window.pushowl.trigger('syncProductView', { productId: 89789578956 })
+    // }, [isProductPage])
 
     // sync cart when its items change
     useEffect(() => {
-        window.pushowl.trigger('syncCart', {
-            checkoutToken: '',
-            items: cartItems,
-        })
-    }, [cartItems])
+        if (cartId !== null) {
+            const items = cartItems.map((item) => ({
+                variantId: atob(item.variant.id).split('/').pop(),
+                productId: atob(item.id).split('/').pop().split('?checkout=')[0],
+                quantity: item.quantity,
+            }))
+
+            // eslint-disable-next-line no-console
+            console.log('items', items)
+
+            window.pushowl.trigger('syncCart', {
+                items,
+                checkoutToken: atob(cartId).split('/').pop().split('?key=')[0],
+            })
+        }
+    }, [cartId, cartItems])
 
     const showWidget = (payload: any) => {
         return window.pushowl.trigger('showWidget', payload)
