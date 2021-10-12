@@ -45,7 +45,7 @@ export const usePushowl = (subdomain: string) => {
                         script.async = true
                         script.src = `https://cdn.pushowl.com/sdks/pushowl-sdk.js?subdomain=${subdomain}&environment=production&shop=${subdomain}.myshopify.com`
                         document.body.append(script)
-                        script.addEventListener('onload', () => {
+                        script.addEventListener('load', () => {
                             setHasLoaded(true)
                         })
 
