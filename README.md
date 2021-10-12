@@ -30,7 +30,7 @@ import { usePushowl } from '@frontend-sdk/pushowl'
 
 const App = () => {
   // Initialize pushowl
-  usePushowl('test.myshopify.com')
+  const { hasLoaded } = usePushowl('your-shopify-subdomain')
 }
 ```
 
@@ -40,7 +40,9 @@ You need to copy a service worker file from this module's directory (node_module
 
 You can run the following set of commands from your root directory to copy the service worker file:
 
+```
 cp node_modules/@frontend-sdk/pushowl/service-worker.js static/
+```
 
 #### Abandoned Cart Recovery automation (Optional, if enabled)
 
@@ -56,9 +58,9 @@ Here is how to update your cart URL in PushOwl dashboard:
    ![changing cart urls](/assets/cart-url-change.png)
 4. Save and you are done!
 
-### Browse Abandonment, Price Drop, Back in Stock automations (Optional, if enabled)
+### Browse Abandonment (Optional, if enabled)
 
-[Browse abandonment](https://docs.pushowl.com/en/articles/3821822-browse-abandonment), [Price drop](https://docs.pushowl.com/en/articles/2320402-price-drop-alert), [Back in stock](https://docs.pushowl.com/en/articles/2320389-back-in-stock-alert), if available on your PushOwl plan, work out of the box through this module.
+[Browse abandonment](https://docs.pushowl.com/en/articles/3821822-browse-abandonment)
 
 Your product URLs defined in the Shopify admin should still work (as it is or with redirection). This is because on clicking Browse Abandonment notifications, users are taken to the product URL defined in the Shopify admin.
 
@@ -67,6 +69,65 @@ Your product URLs defined in the Shopify admin should still work (as it is or wi
 ![store url](/assets/store-url.png)
 
 If the store URL you see above is not the right store URL where products are available, then the automation settings need to be adjusted for that. Currently, this can only be adjusted through us. So if this is the case, please let us know on [support@pushowl.com](support@pushowl.com) and we'll adjust the URLs.
+
+You need to enable `externalId` and `storefrontId` for product and variants in your `ProductBox` section and then call the following effect in your code
+
+```js
+React.useEffect(() => {
+  if (hasLoaded && product) {
+    window.pushowl.trigger('syncProductView', { productId: product.id })
+  }
+}, [product])
+```
+
+### Price Drop, Back in Stock automations (Optional, if enabled)
+
+In your `ProductBox` section you can call the following effect
+
+```js
+React.useEffect(() => {
+  if (product && hasLoaded) {
+    async function showProductWidget() {
+      // converting variant id from base64 to number
+      const variantId = parseInt(atob(product.variants[0].storefrontId).split('/').pop(), 10)
+      const availableForSale = await isProductAvailableForSale({
+        id: variantId,
+        type: 'ProductVariant',
+      })
+
+      if (availableForSale) {
+        window.pushowl.trigger('showWidget', {
+          type: 'priceDrop',
+          product: {
+            id: product.id,
+            title: product.name,
+          },
+          variant: {
+            id: variantId,
+            title: product.variants[0].name,
+            price: product.variants[0].price,
+          },
+        })
+      } else {
+        window.pushowl.trigger('showWidget', {
+          type: 'backInStock',
+          product: {
+            id: product.id,
+            title: product.name,
+          },
+          variant: {
+            id: variantId,
+            title: product.variants[0].name,
+            price: product.variants[0].price,
+          },
+        })
+      }
+    }
+
+    showProductWidget()
+  }
+}, [])
+```
 
 ## API
 
