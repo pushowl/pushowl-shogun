@@ -67,7 +67,10 @@ export const usePushowl = (subdomain: string) => {
 
     // Syncing customer id
     useEffect(() => {
-        if (canSync) window.pushowl.trigger('setCustomerId', customerId)
+        if (customerId !== null && canSync) {
+            const decodedCustomerId = parseInt(atob(`${customerId}`).split('/').pop() || '', 10)
+            window.pushowl.trigger('setCustomerId', decodedCustomerId)
+        }
     }, [customerId, canSync])
 
     // sync cart when its items change
