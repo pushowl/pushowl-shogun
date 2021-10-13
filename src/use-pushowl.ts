@@ -6,6 +6,7 @@ import { StorePlatformDomain, Pushowl } from './types'
 export const usePushowl = (subdomain: string) => {
     const cart = useCartState()
     const [hasLoaded, setHasLoaded] = useState(false)
+    const [canSync, setCanSync] = useState(false)
     const { id: customerId } = useCustomerState()
     const cartId = cart.id
 
@@ -14,6 +15,7 @@ export const usePushowl = (subdomain: string) => {
     // Injecting pushowl script to the store
     useEffect(() => {
         if (document.querySelector('[data-script="pushowl"]')) {
+            setHasLoaded(true)
             return
         }
 
@@ -47,6 +49,7 @@ export const usePushowl = (subdomain: string) => {
                         document.body.append(script)
                         script.addEventListener('load', () => {
                             setHasLoaded(true)
+                            setCanSync(true)
                         })
 
                         return script
@@ -60,16 +63,16 @@ export const usePushowl = (subdomain: string) => {
         }
 
         injectScript(subdomain)
-    }, [subdomain])
+    }, [subdomain, setCanSync])
 
     // Syncing customer id
     useEffect(() => {
-        window.pushowl.trigger('setCustomerId', customerId)
-    }, [customerId])
+        if (canSync) window.pushowl.trigger('setCustomerId', customerId)
+    }, [customerId, canSync])
 
     // sync cart when its items change
     useEffect(() => {
-        if (cartId !== null) {
+        if (cartId !== null && canSync) {
             const items = cartItems.map((item) => ({
                 variantId: atob(item.variant.id).split('/').pop(),
                 productId: atob(item.id).split('/').pop().split('?checkout=')[0],
@@ -81,7 +84,7 @@ export const usePushowl = (subdomain: string) => {
                 checkoutToken: atob(cartId).split('/').pop().split('?key=')[0],
             })
         }
-    }, [cartId, cartItems])
+    }, [canSync, cartId, cartItems])
 
     return {
         hasLoaded,
