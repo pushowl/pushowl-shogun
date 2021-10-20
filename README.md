@@ -34,16 +34,6 @@ const App = () => {
 }
 ```
 
-### Adding service worker
-
-You need to copy a service worker file from this module's directory (node_modules/@frontend-sdk/pushowl/service-worker.js) into your app's static dir such that it is available on the path /static/pushowl/service-worker.js.
-
-You can run the following set of commands from your root directory to copy the service worker file:
-
-```
-cp node_modules/@frontend-sdk/pushowl/service-worker.js static/
-```
-
 #### Abandoned Cart Recovery automation (Optional, if enabled)
 
 Abandoned Cart, if available on your PushOwl plan, works out of the box through this module for most parts. There is just configuration change required on PushOwl Side. Abandoned Cart push notifications open the cart page of your store. For stores with custom frontends, it becomes difficult to figure out the cart URL automatically. Hence, you need to explicitly enter your cart URL from PushOwl dashboard.
