@@ -161,37 +161,41 @@ Cart syncing is auto-enabled in this module. This API gets called automatically 
 
 ### To show a native browser prompt
 
-```
-if (Notification.permission === "default") {
-  window.pushowl
-    .trigger("showWidget", {
-      type: "browserPrompt",
-    })
-    .then((res) => {
-      // Do anything you want to after showing prompt
-    });
-}
+```javascript
+window.pushowl.trigger('getCurrentPermission').then((permission) => {
+  if (permission === 'default') {
+    window.pushowl
+      .trigger('showWidget', {
+        type: 'browserPrompt',
+      })
+      .then((res) => {
+        // Do anything you want to after showing prompt
+      })
+  }
+})
 ```
 
 Note, always check the current permission value before showing the prompt. `default` value means user has neither allowed nor denied.
 
 ### To show a Custom Prompt
 
-```
-if (Notification.permission === "default") {
-  window.pushowl
-    .trigger("showWidget", {
-      type: "customPrompt",
-      title: "Lets get you offers!",
-      description: "Subscribe to get amazing offers",
-      yesButton: { label: "Subscribe" },
-      noButton: { label: "Later" },
-      logo: "image url here",
-      position: { default: "top-left", mobile: "bottom" },
-      overlay: { enabled: false },
-    })
-    .then((res) => {
-      // Do anything you want to after showing prompt
-    });
-}
+```javascript
+window.pushowl.trigger('getCurrentPermission').then((permission) => {
+  if (permission === 'default') {
+    window.pushowl
+      .trigger('showWidget', {
+        type: 'customPrompt',
+        title: 'Lets get you offers!',
+        description: 'Subscribe to get amazing offers',
+        yesButton: { label: 'Subscribe' },
+        noButton: { label: 'Later' },
+        logo: 'image url here',
+        position: { default: 'top-left', mobile: 'bottom' },
+        overlay: { enabled: false },
+      })
+      .then((res) => {
+        // Do anything you want to after showing prompt
+      })
+  }
+})
 ```
