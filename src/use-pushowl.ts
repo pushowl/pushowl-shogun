@@ -1,7 +1,24 @@
 import { useEffect, useState } from 'react'
-import { useCartState } from 'frontend-checkout'
+import { useCartState, LineItem } from 'frontend-checkout'
 import { useCustomerState } from 'frontend-customer'
 import { StorePlatformDomain, Pushowl } from './types'
+
+const isRecord = (value: unknown): value is Record<PropertyKey, unknown> =>
+    typeof value === 'object' && value !== null && !Array.isArray(value)
+
+const getVariantIdFromItem = (item: LineItem): string => {
+    // eslint-disable-next-line no-prototype-builtins
+    if (isRecord(item) && isRecord(item.variant) && item.variant.hasOwnProperty('id')) {
+        return `${item.variant.id}`
+    }
+
+    // eslint-disable-next-line no-prototype-builtins
+    if (isRecord(item) && item.hasOwnProperty('variant_id')) {
+        return `${item.variant_id}`
+    }
+
+    return ''
+}
 
 export const usePushowl = (subdomain: string) => {
     const cart = useCartState()
@@ -87,9 +104,7 @@ export const usePushowl = (subdomain: string) => {
                     productId = parseInt(productWithCheckout.split('?checkout=')[0], 10)
                 }
 
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/ban-ts-ignore
-                // @ts-ignore
-                const variantIdStr = atob(item.variant.id).split('/').pop()
+                const variantIdStr = atob(getVariantIdFromItem(item)).split('/').pop()
                 let variantId = null
 
                 if (variantIdStr !== undefined) {
