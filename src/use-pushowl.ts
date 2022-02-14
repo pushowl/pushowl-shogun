@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useCartState, LineItem } from 'frontend-checkout'
+import { useCartState } from 'frontend-checkout'
 import { useCustomerState } from 'frontend-customer'
 import { StorePlatformDomain, Pushowl } from './types'
 
 const isRecord = (value: unknown): value is Record<PropertyKey, unknown> =>
     typeof value === 'object' && value !== null && !Array.isArray(value)
 
-const getVariantIdFromItem = (item: LineItem): string => {
+const getVariantIdFromItem = (item: any): string => {
     // eslint-disable-next-line no-prototype-builtins
     if (isRecord(item) && isRecord(item.variant) && item.variant.hasOwnProperty('id')) {
         return `${item.variant.id}`
