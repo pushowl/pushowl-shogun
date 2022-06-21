@@ -1609,15 +1609,15 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-frontend-checkout@^2.11.7-alpha-1:
-  version "2.12.4"
-  resolved "https://registry.yarnpkg.com/frontend-checkout/-/frontend-checkout-2.12.4.tgz#561e3b7f830d6a38d901421f848c6ac4b55c17dd"
-  integrity sha512-0GIyEyQfqokAEqXFbukKk8CgfSNKhOs3PBNJU+CzPfzQ+3ycEInMbSLNve7gH7ZirRrx4TtnRX+5HBhk09qdAw==
+frontend-checkout@^3.3.7-alpha.1:
+  version "3.3.7-alpha.1"
+  resolved "https://registry.yarnpkg.com/frontend-checkout/-/frontend-checkout-3.3.7-alpha.1.tgz#f84f3c6625c4fcd2eecdd46a39e046d97244e85a"
+  integrity sha512-JXzfjnjAA98M2kLe4GgAOgwmgt1y7MIC0LsI4K/niN7MX1VC7dtVz+2yDwOlur8fdVBHus238MbDFhkG+drbRA==
 
-frontend-customer@^1.3.5:
-  version "1.6.4"
-  resolved "https://registry.yarnpkg.com/frontend-customer/-/frontend-customer-1.6.4.tgz#9b3aeb010a4e65ac1ccf12d6ea94686cc9b60e6a"
-  integrity sha512-gZdaCoFKKJ8n1lcN7f0xXzHBBp3jw4MFvUH4DzpVwNoWwKssrJxljbj/zdBnw8WY5gmVtJCaNIImeaFiWcDEsg==
+frontend-customer@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/frontend-customer/-/frontend-customer-2.0.4.tgz#68dafca8dbb141bd625e3fd8bfb166768883d905"
+  integrity sha512-rn/nZ9iNJExlb8u1MDz8n2OXipwI+v3BbmLWeZ3TJ0rAllSx/wNQKvDJj+miI09fdyQH0vv16qDi17neWIM5KQ==
 
 fs.realpath@^1.0.0:
   version "1.0.0"
