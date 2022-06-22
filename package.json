@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "repository": "https://github.com/getshogun/frontend-sdk",
+  "repository": "https://github.com/pushowl/pushowl-shogun",
   "bugs": {
-    "url": "https://github.com/getshogun/frontend-sdk/issues"
+    "url": "https://github.com/pushowl/pushowl-shogun/issues"
   },
-  "author": "Shogun",
+  "author": "PushOwl",
   "license": "MIT",
   "private": true,
   "publishConfig": {
