@@ -1,5 +1,5 @@
 {
-  "name": "@frontend-sdk/pushowl",
+  "name": "@pushowl/shogun-frontend-sdk",
   "version": "0.0.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

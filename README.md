@@ -19,19 +19,19 @@ This package allows you to send push notification for shogun store with shopify 
 
 ## Installation
 
-`yarn add @frontend-sdk/pushowl`
+`yarn add @pushowl/shogun-frontend-sdk`
 
-`npm install @frontend-sdk/pushowl`
+`npm install @pushowl/shogun-frontend-sdk`
 
 ## Initialzing the hook
 
 ```tsx
-import { usePushowl } from '@frontend-sdk/pushowl'
+import { usePushowl } from "@pushowl/shogun-frontend-sdk";
 
 const App = () => {
   // Initialize pushowl
-  const { hasLoaded } = usePushowl('your-shopify-subdomain')
-}
+  const { hasLoaded } = usePushowl("your-shopify-subdomain");
+};
 ```
 
 #### Abandoned Cart Recovery automation (Optional, if enabled)
@@ -65,9 +65,9 @@ You need to enable `externalId` and `storefrontId` for product and variants in y
 ```js
 React.useEffect(() => {
   if (hasLoaded && product) {
-    window.pushowl.trigger('syncProductView', { productId: product.id })
+    window.pushowl.trigger("syncProductView", { productId: product.id });
   }
-}, [product])
+}, [product]);
 ```
 
 ### Price Drop, Back in Stock automations (Optional, if enabled)
@@ -79,15 +79,18 @@ React.useEffect(() => {
   if (product && hasLoaded) {
     async function showProductWidget() {
       // converting variant id from base64 to number
-      const variantId = parseInt(atob(product.variants[0].storefrontId).split('/').pop(), 10)
+      const variantId = parseInt(
+        atob(product.variants[0].storefrontId).split("/").pop(),
+        10
+      );
       const availableForSale = await isProductAvailableForSale({
         id: variantId,
-        type: 'ProductVariant',
-      })
+        type: "ProductVariant",
+      });
 
       if (availableForSale) {
-        window.pushowl.trigger('showWidget', {
-          type: 'priceDrop',
+        window.pushowl.trigger("showWidget", {
+          type: "priceDrop",
           product: {
             id: product.id,
             title: product.name,
@@ -97,10 +100,10 @@ React.useEffect(() => {
             title: product.variants[0].name,
             price: product.variants[0].price,
           },
-        })
+        });
       } else {
-        window.pushowl.trigger('showWidget', {
-          type: 'backInStock',
+        window.pushowl.trigger("showWidget", {
+          type: "backInStock",
           product: {
             id: product.id,
             title: product.name,
@@ -110,13 +113,13 @@ React.useEffect(() => {
             title: product.variants[0].name,
             price: product.variants[0].price,
           },
-        })
+        });
       }
     }
 
-    showProductWidget()
+    showProductWidget();
   }
-}, [])
+}, []);
 ```
 
 ## API
@@ -162,17 +165,17 @@ Cart syncing is auto-enabled in this module. This API gets called automatically 
 ### To show a native browser prompt
 
 ```javascript
-window.pushowl.trigger('getCurrentPermission').then((permission) => {
-  if (permission === 'default') {
+window.pushowl.trigger("getCurrentPermission").then((permission) => {
+  if (permission === "default") {
     window.pushowl
-      .trigger('showWidget', {
-        type: 'browserPrompt',
+      .trigger("showWidget", {
+        type: "browserPrompt",
       })
       .then((res) => {
         // Do anything you want to after showing prompt
-      })
+      });
   }
-})
+});
 ```
 
 Note, always check the current permission value before showing the prompt. `default` value means user has neither allowed nor denied.
@@ -180,22 +183,22 @@ Note, always check the current permission value before showing the prompt. `defa
 ### To show a Custom Prompt
 
 ```javascript
-window.pushowl.trigger('getCurrentPermission').then((permission) => {
-  if (permission === 'default') {
+window.pushowl.trigger("getCurrentPermission").then((permission) => {
+  if (permission === "default") {
     window.pushowl
-      .trigger('showWidget', {
-        type: 'customPrompt',
-        title: 'Lets get you offers!',
-        description: 'Subscribe to get amazing offers',
-        yesButton: { label: 'Subscribe' },
-        noButton: { label: 'Later' },
-        logo: 'image url here',
-        position: { default: 'top-left', mobile: 'bottom' },
+      .trigger("showWidget", {
+        type: "customPrompt",
+        title: "Lets get you offers!",
+        description: "Subscribe to get amazing offers",
+        yesButton: { label: "Subscribe" },
+        noButton: { label: "Later" },
+        logo: "image url here",
+        position: { default: "top-left", mobile: "bottom" },
         overlay: { enabled: false },
       })
       .then((res) => {
         // Do anything you want to after showing prompt
-      })
+      });
   }
-})
+});
 ```
