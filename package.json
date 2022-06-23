@@ -9,7 +9,6 @@
   },
   "author": "PushOwl",
   "license": "MIT",
-  "private": true,
   "publishConfig": {
     "access": "public"
   },
