@@ -19,9 +19,11 @@ This package allows you to send push notification for shogun store with shopify 
 
 ## Installation
 
-`yarn add @pushowl/shogun-frontend-sdk`
-
-`npm install @pushowl/shogun-frontend-sdk`
+1. First install [PushOwl Shopify app](https://apps.shopify.com/pushowl) in your store
+2. Then install the following PushOwl Shogun integration npm package
+   `@pushowl/shogun-frontend-sdk`
+   You can check [Shogun docs](https://docs.getshogun.com/shogun-frontend-guides/docs/dependency-management) for more info about installing dependency
+3. You can [contact](https://getshogun.atlassian.net/servicedesk/customer/portals) Shogun team to enable PushOwl service worker for your store
 
 ## Initialzing the hook
 
