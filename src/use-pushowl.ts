@@ -33,6 +33,7 @@ export const usePushowl = (subdomain: string) => {
     useEffect(() => {
         if (document.querySelector('[data-script="pushowl"]')) {
             setHasLoaded(true)
+            setCanSync(true)
             return
         }
 
