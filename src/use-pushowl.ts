@@ -23,7 +23,6 @@ const getVariantIdFromItem = (item: any): string => {
 export const usePushowl = (subdomain: string) => {
     const cart = useCartState()
     const [hasLoaded, setHasLoaded] = useState(false)
-    const [canSync, setCanSync] = useState(false)
     const { id: customerId } = useCustomerState()
     const cartId = cart.id
 
@@ -33,7 +32,6 @@ export const usePushowl = (subdomain: string) => {
     useEffect(() => {
         if (document.querySelector('[data-script="pushowl"]')) {
             setHasLoaded(true)
-            setCanSync(true)
             return
         }
 
@@ -68,7 +66,6 @@ export const usePushowl = (subdomain: string) => {
                         document.body.append(script)
                         script.addEventListener('load', () => {
                             setHasLoaded(true)
-                            setCanSync(true)
                         })
 
                         return script
@@ -82,21 +79,21 @@ export const usePushowl = (subdomain: string) => {
         }
 
         injectScript(subdomain)
-    }, [subdomain, setCanSync])
+    }, [subdomain, hasLoaded])
 
     // Syncing customer id
     useEffect(() => {
-        if (customerId !== null && canSync) {
+        if (customerId !== null && hasLoaded) {
             const decodedCustomerId = atob(`${customerId}`).split('/').pop()
             if (decodedCustomerId !== undefined) {
                 window.pushowl.trigger('setCustomerId', parseInt(decodedCustomerId))
             }
         }
-    }, [customerId, canSync])
+    }, [customerId, hasLoaded])
 
     // sync cart when its items change
     useEffect(() => {
-        if (cartId !== null && canSync) {
+        if (cartId !== null && hasLoaded) {
             const items = cartItems.map((item) => {
                 const productWithCheckout = atob(item.id).split('/').pop()
 
@@ -132,7 +129,7 @@ export const usePushowl = (subdomain: string) => {
                 checkoutToken,
             })
         }
-    }, [canSync, cartId, cartItems])
+    }, [hasLoaded, cartId, cartItems])
 
     return {
         hasLoaded,
