@@ -22,8 +22,7 @@
     "start:tsc": "yarn build:tsc -w",
     "start": "yarn start:tsc",
     "typedoc": "typedoc --tsconfig ./tsconfig.build.json",
-    "prepublishOnly": "yarn test && yarn build",
-    "version": "yarn typedoc && git add docs"
+    "prepublishOnly": "yarn test && yarn build"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.2",
