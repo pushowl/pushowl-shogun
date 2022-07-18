@@ -40,14 +40,10 @@
   },
   "peerDependencies": {
     "@types/react": "^17.0.0",
-    "frontend-checkout": "^3.3.7-alpha.1",
-    "frontend-customer": "^2.0.4",
     "react": "^17.0.0"
   },
   "dependencies": {
     "faker": "^5.2.0",
-    "frontend-checkout": "^3.3.7-alpha.1",
-    "frontend-customer": "^2.0.4",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "tslib": "^2.1.0"

@@ -160,7 +160,33 @@ For `priceDrop` and `backInStock`
 
 ### `syncCart`
 
-Cart syncing is auto-enabled in this module. This API gets called automatically whenever the cart is updated.
+```javascript
+import { useCartState, processCart } from "frontend-checkout";
+
+const cart = useCartState();
+const cartId = cart.id;
+const cartItems = cart.items;
+
+React.useEffect(() => {
+  if (hasLoaded && cartItems && cartId) {
+    window.pushowl.trigger("syncCart", processCart({ cartItems, cartId }));
+  }
+}, [cartId, cartItems, hasLoaded]);
+```
+
+### `customerSync`
+
+```javascript
+import { useCustomerState, processCustomerId } from "frontend-customer";
+
+const { id: customerId } = useCustomerState();
+
+React.useEffect(() => {
+  if (hasLoaded && customerId) {
+    window.pushowl.trigger("setCustomerId", processCustomerId({ customerId }));
+  }
+}, [customerId, hasLoaded]);
+```
 
 ## Recipes
 
