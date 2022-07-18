@@ -22,7 +22,10 @@ const getVariantIdFromItem = (item: any): string => {
   return "";
 };
 
-const processCart = (taskInput: { cartId: string; cartItems: Array<any> }) => {
+export const processCart = (taskInput: {
+  cartId: string;
+  cartItems: Array<any>;
+}) => {
   const { cartItems, cartId } = taskInput;
 
   const items = cartItems.map((item) => {
@@ -61,7 +64,7 @@ const processCart = (taskInput: { cartId: string; cartItems: Array<any> }) => {
   };
 };
 
-const processCustomerId = (taskInput: { customerId: string }) => {
+export const processCustomerId = (taskInput: { customerId: string }) => {
   const { customerId } = taskInput;
   const decodedCustomerId = atob(`${customerId}`).split("/").pop();
   if (decodedCustomerId !== undefined) {
@@ -128,7 +131,5 @@ export const usePushowl = (subdomain: string) => {
 
   return {
     hasLoaded,
-    processCustomerId,
-    processCart,
   };
 };
