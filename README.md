@@ -161,7 +161,8 @@ For `priceDrop` and `backInStock`
 ### `syncCart`
 
 ```javascript
-import { useCartState, processCart } from "frontend-checkout";
+import { useCartState } from "frontend-checkout";
+import { processCart } from "@pushowl/shogun-frontend-sdk";
 
 const cart = useCartState();
 const cartId = cart.id;
@@ -177,7 +178,8 @@ React.useEffect(() => {
 ### `customerSync`
 
 ```javascript
-import { useCustomerState, processCustomerId } from "frontend-customer";
+import { useCustomerState } from "frontend-customer";
+import { processCustomerId } from "@pushowl/shogun-frontend-sdk";
 
 const { id: customerId } = useCustomerState();
 
