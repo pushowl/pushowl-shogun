@@ -22,12 +22,13 @@ const getVariantIdFromItem = (item: any): string => {
   return "";
 };
 
-export const processCart = (taskInput: {
+export const processCart = ({
+  cartItems,
+  cartId,
+}: {
   cartId: string;
   cartItems: Array<any>;
 }) => {
-  const { cartItems, cartId } = taskInput;
-
   const items = cartItems.map((item) => {
     const productWithCheckout = atob(item.id).split("/").pop();
 
@@ -64,8 +65,7 @@ export const processCart = (taskInput: {
   };
 };
 
-export const processCustomerId = (taskInput: { customerId: string }) => {
-  const { customerId } = taskInput;
+export const processCustomerId = ({ customerId }: { customerId: string }) => {
   const decodedCustomerId = atob(`${customerId}`).split("/").pop();
   if (decodedCustomerId !== undefined) {
     return parseInt(decodedCustomerId);
