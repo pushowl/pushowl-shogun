@@ -65,6 +65,10 @@ If the store URL you see above is not the right store URL where products are ava
 You need to enable `externalId` and `storefrontId` for product and variants in your `ProductBox` section and then call the following effect in your code
 
 ```js
+import { usePushowl } from "@pushowl/shogun-frontend-sdk";
+
+const { hasLoaded } = usePushowl("your-shopify-subdomain");
+
 React.useEffect(() => {
   if (hasLoaded && product) {
     window.pushowl.trigger("syncProductView", { productId: product.id });
@@ -77,6 +81,10 @@ React.useEffect(() => {
 In your `ProductBox` section you can call the following effect
 
 ```js
+import { usePushowl } from "@pushowl/shogun-frontend-sdk";
+
+const { hasLoaded } = usePushowl("your-shopify-subdomain");
+
 React.useEffect(() => {
   if (product && hasLoaded) {
     async function showProductWidget() {
@@ -163,6 +171,9 @@ For `priceDrop` and `backInStock`
 ```javascript
 import { useCartState } from "frontend-checkout";
 import { processCart } from "@pushowl/shogun-frontend-sdk";
+import { usePushowl } from "@pushowl/shogun-frontend-sdk";
+
+const { hasLoaded } = usePushowl("your-shopify-subdomain");
 
 const cart = useCartState();
 const cartId = cart.id;
@@ -180,7 +191,9 @@ React.useEffect(() => {
 ```javascript
 import { useCustomerState } from "frontend-customer";
 import { processCustomerId } from "@pushowl/shogun-frontend-sdk";
+import { usePushowl } from "@pushowl/shogun-frontend-sdk";
 
+const { hasLoaded } = usePushowl("your-shopify-subdomain");
 const { id: customerId } = useCustomerState();
 
 React.useEffect(() => {
