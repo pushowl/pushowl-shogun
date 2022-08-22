@@ -21,8 +21,6 @@ module.exports = {
     "!./packages/*/src/**/*.stories.tsx",
     "!./packages/*/src/**/*.mock.ts",
     "!./packages/*/src/index.ts",
-    "!./packages/frontend-customer/**/*.{ts,tsx}",
-    "!./packages/frontend-checkout/**/*.{ts,tsx}",
   ],
   globals: {
     "ts-jest": {

@@ -65,6 +65,10 @@ If the store URL you see above is not the right store URL where products are ava
 You need to enable `externalId` and `storefrontId` for product and variants in your `ProductBox` section and then call the following effect in your code
 
 ```js
+import { usePushowl } from "@pushowl/shogun-frontend-sdk";
+
+const { hasLoaded } = usePushowl("your-shopify-subdomain");
+
 React.useEffect(() => {
   if (hasLoaded && product) {
     window.pushowl.trigger("syncProductView", { productId: product.id });
@@ -77,6 +81,10 @@ React.useEffect(() => {
 In your `ProductBox` section you can call the following effect
 
 ```js
+import { usePushowl } from "@pushowl/shogun-frontend-sdk";
+
+const { hasLoaded } = usePushowl("your-shopify-subdomain");
+
 React.useEffect(() => {
   if (product && hasLoaded) {
     async function showProductWidget() {
@@ -160,7 +168,38 @@ For `priceDrop` and `backInStock`
 
 ### `syncCart`
 
-Cart syncing is auto-enabled in this module. This API gets called automatically whenever the cart is updated.
+```javascript
+import { useCartState } from "frontend-checkout";
+import { processCart, usePushowl } from "@pushowl/shogun-frontend-sdk";
+
+const { hasLoaded } = usePushowl("your-shopify-subdomain");
+
+const cart = useCartState();
+const cartId = cart.id;
+const cartItems = cart.items;
+
+React.useEffect(() => {
+  if (hasLoaded && cartItems && cartId) {
+    window.pushowl.trigger("syncCart", processCart({ cartItems, cartId }));
+  }
+}, [cartId, cartItems, hasLoaded]);
+```
+
+### `customerSync`
+
+```javascript
+import { useCustomerState } from "frontend-customer";
+import { processCustomerId, usePushowl } from "@pushowl/shogun-frontend-sdk";
+
+const { hasLoaded } = usePushowl("your-shopify-subdomain");
+const { id: customerId } = useCustomerState();
+
+React.useEffect(() => {
+  if (hasLoaded && customerId) {
+    window.pushowl.trigger("setCustomerId", processCustomerId({ customerId }));
+  }
+}, [customerId, hasLoaded]);
+```
 
 ## Recipes
 

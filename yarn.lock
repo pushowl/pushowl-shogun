@@ -1609,16 +1609,6 @@ fragment-cache@^0.2.1:
   dependencies:
     map-cache "^0.2.2"
 
-frontend-checkout@^3.3.7-alpha.1:
-  version "3.3.7-alpha.1"
-  resolved "https://registry.yarnpkg.com/frontend-checkout/-/frontend-checkout-3.3.7-alpha.1.tgz#f84f3c6625c4fcd2eecdd46a39e046d97244e85a"
-  integrity sha512-JXzfjnjAA98M2kLe4GgAOgwmgt1y7MIC0LsI4K/niN7MX1VC7dtVz+2yDwOlur8fdVBHus238MbDFhkG+drbRA==
-
-frontend-customer@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/frontend-customer/-/frontend-customer-2.0.4.tgz#68dafca8dbb141bd625e3fd8bfb166768883d905"
-  integrity sha512-rn/nZ9iNJExlb8u1MDz8n2OXipwI+v3BbmLWeZ3TJ0rAllSx/wNQKvDJj+miI09fdyQH0vv16qDi17neWIM5KQ==
-
 fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
