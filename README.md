@@ -170,8 +170,7 @@ For `priceDrop` and `backInStock`
 
 ```javascript
 import { useCartState } from "frontend-checkout";
-import { processCart } from "@pushowl/shogun-frontend-sdk";
-import { usePushowl } from "@pushowl/shogun-frontend-sdk";
+import { processCart, usePushowl } from "@pushowl/shogun-frontend-sdk";
 
 const { hasLoaded } = usePushowl("your-shopify-subdomain");
 
