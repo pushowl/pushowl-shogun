@@ -189,8 +189,7 @@ React.useEffect(() => {
 
 ```javascript
 import { useCustomerState } from "frontend-customer";
-import { processCustomerId } from "@pushowl/shogun-frontend-sdk";
-import { usePushowl } from "@pushowl/shogun-frontend-sdk";
+import { processCustomerId, usePushowl } from "@pushowl/shogun-frontend-sdk";
 
 const { hasLoaded } = usePushowl("your-shopify-subdomain");
 const { id: customerId } = useCustomerState();
